@@ -17,7 +17,7 @@ public class MainActivity extends AppCompatActivity {
     private static final int ROW_D_SIZE = 6;
     private static final int ROW_E_SIZE = 4;
 
-    private static final int KEY_SIZE = 75;
+    private static final int KEY_SIZE = 100;
 
     private static final double ROW_A_LEFT_OFFSET = 1.5; // Expressed as a factor of KEY_SIZE
     private static final double ROW_B_LEFT_OFFSET = 0.5;
@@ -41,9 +41,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         findViews();
-        setTextViewSize(KEY_SIZE);
-//        setBackgroundColor(Color.BLUE);
-        setBorder();
+//        setTextViewSize(KEY_SIZE);
+        setBackgroundColor(Color.BLUE);
+//        setBorder();
         setOffsets();
 
 
@@ -103,8 +103,8 @@ public class MainActivity extends AppCompatActivity {
     {
         for (int i = 0; i < ROW_A_SIZE; i++)
         {
-            textViewsC[i].setWidth(size);
-            textViewsC[i].setHeight(size);
+            textViewsA[i].setWidth(size);
+            textViewsA[i].setHeight(size);
         }
         for (int i = 0; i < ROW_B_SIZE; i++)
         {
@@ -128,63 +128,70 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void setBorder() {
-        for (int i = 0; i < ROW_A_SIZE; i++)
-        {
-            textViewsA[i].setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.border));
-        }
-//        for (int i = 0; i < ROW_A_SIZE - 1; i++)
+//    private void setBorder() {
+//        for (int i = 0; i < ROW_A_SIZE; i++)
 //        {
-//            textViewsA[i].setCompoundDrawables(
-//                    ContextCompat.getDrawable(getApplicationContext(), R.drawable.border),
-//                    null,
-//                    null,
-//                    null
-//            );
+//            textViewsA[i].setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.border));
 //        }
-//        textViewsA[ROW_A_SIZE - 1].setCompoundDrawables(
-//                ContextCompat.getDrawable(getApplicationContext(), R.drawable.border),
-//                null,
-//                ContextCompat.getDrawable(getApplicationContext(), R.drawable.border),
-//                null
-//        );
-        for (int i = 0; i < ROW_B_SIZE; i++)
-        {
-            textViewsB[i].setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.border));
-        }
-        for (int i = 0; i < ROW_C_SIZE; i++)
-        {
-            textViewsC[i].setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.border));
-        }
-        for (int i = 0; i < ROW_D_SIZE; i++)
-        {
-            textViewsD[i].setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.border));
-        }
-        for (int i = 0; i < ROW_E_SIZE; i++)
-        {
-            textViewsE[i].setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.border));
-        }
-    }
+//        for (int i = 0; i < ROW_B_SIZE; i++)
+//        {
+//            textViewsB[i].setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.border));
+//        }
+//        for (int i = 0; i < ROW_C_SIZE; i++)
+//        {
+//            textViewsC[i].setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.border));
+//        }
+//        for (int i = 0; i < ROW_D_SIZE; i++)
+//        {
+//            textViewsD[i].setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.border));
+//        }
+//        for (int i = 0; i < ROW_E_SIZE; i++)
+//        {
+//            textViewsE[i].setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.border));
+//        }
+//
+//
+////        for (int i = 0; i < ROW_A_SIZE - 1; i++)
+////        {
+////            textViewsA[i].setCompoundDrawables(
+////                    ContextCompat.getDrawable(getApplicationContext(), R.drawable.border),
+////                    null,
+////                    null,
+////                    null
+////            );
+////        }
+////        textViewsA[ROW_A_SIZE - 1].setCompoundDrawables(
+////                ContextCompat.getDrawable(getApplicationContext(), R.drawable.border),
+////                null,
+////                ContextCompat.getDrawable(getApplicationContext(), R.drawable.border),
+////                null
+////        );
+//    }
 
     private void setBackgroundColor(int color) {
         for (int i = 0; i < ROW_A_SIZE; i++)
         {
+            color = i % 2 == 0 ? Color.RED : Color.BLUE;
             textViewsA[i].setBackgroundColor(color);
         }
         for (int i = 0; i < ROW_B_SIZE; i++)
         {
+            color = i % 2 == 0 ? Color.RED : Color.BLUE;
             textViewsB[i].setBackgroundColor(color);
         }
         for (int i = 0; i < ROW_C_SIZE; i++)
         {
+            color = i % 2 == 0 ? Color.RED : Color.BLUE;
             textViewsC[i].setBackgroundColor(color);
         }
         for (int i = 0; i < ROW_D_SIZE; i++)
         {
+            color = i % 2 == 0 ? Color.RED : Color.BLUE;
             textViewsD[i].setBackgroundColor(color);
         }
         for (int i = 0; i < ROW_E_SIZE; i++)
         {
+            color = i % 2 == 0 ? Color.RED : Color.BLUE;
             textViewsE[i].setBackgroundColor(color);
         }
     }
