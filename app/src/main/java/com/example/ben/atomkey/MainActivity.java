@@ -2,11 +2,14 @@ package com.example.ben.atomkey;
 
 import android.graphics.Color;
 import android.support.v4.content.ContextCompat;
+import android.widget.Space;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import java.util.Random;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -31,6 +34,11 @@ public class MainActivity extends AppCompatActivity {
     private TextView[] textViewsC;
     private TextView[] textViewsD;
     private TextView[] textViewsE;
+    private Space spaceA;
+    private Space spaceB;
+    private Space spaceC;
+    private Space spaceD;
+    private Space spaceE;
     private LinearLayout linearLayoutRowA;
     private LinearLayout linearLayoutRowB;
     private LinearLayout linearLayoutRowC;
@@ -43,12 +51,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         findViews();
-        linearLayoutKeyboard.setMinimumWidth(ROW_C_SIZE * KEY_SIZE);
-        linearLayoutKeyboard.setMinimumHeight(NUM_ROWS * KEY_SIZE);
         setOffsets();
         setTextViewSize(KEY_SIZE);
-        setBackgroundColor(Color.BLUE);
-        setOffsets();
+        randomizeBackgroundColors();
         linearLayoutKeyboard.requestLayout();
         Log.d("size", "A1 size: " + textViewsA[0].getWidth() + "w, " + textViewsA[0].getHeight() + "h");
         Log.d("size", "something else");
@@ -60,6 +65,11 @@ public class MainActivity extends AppCompatActivity {
         textViewsC = new TextView[ROW_C_SIZE];
         textViewsD = new TextView[ROW_D_SIZE];
         textViewsE = new TextView[ROW_E_SIZE];
+        spaceA = (Space) findViewById(R.id.space_a);
+        spaceB = (Space) findViewById(R.id.space_b);
+        spaceC = (Space) findViewById(R.id.space_c);
+        spaceD = (Space) findViewById(R.id.space_d);
+        spaceE = (Space) findViewById(R.id.space_e);
         linearLayoutRowA = (LinearLayout) findViewById(R.id.RowA);
         linearLayoutRowB = (LinearLayout) findViewById(R.id.RowB);
         linearLayoutRowC = (LinearLayout) findViewById(R.id.RowC);
@@ -98,11 +108,11 @@ public class MainActivity extends AppCompatActivity {
 
     private void setOffsets()
     {
-        linearLayoutRowA.setPadding((int) Math.round(ROW_A_LEFT_OFFSET * KEY_SIZE), 0, 0, 0);
-        linearLayoutRowB.setPadding((int) Math.round(ROW_B_LEFT_OFFSET * KEY_SIZE), 0, 0, 0);
-        linearLayoutRowC.setPadding((int) Math.round(ROW_C_LEFT_OFFSET * KEY_SIZE), 0, 0, 0);
-        linearLayoutRowD.setPadding((int) Math.round(ROW_D_LEFT_OFFSET * KEY_SIZE), 0, 0, 0);
-        linearLayoutRowE.setPadding((int) Math.round(ROW_E_LEFT_OFFSET * KEY_SIZE), 0, 0, 0);
+        spaceA.setMinimumWidth((int) Math.round(ROW_A_LEFT_OFFSET * KEY_SIZE));
+        spaceB.setMinimumWidth((int) Math.round(ROW_B_LEFT_OFFSET * KEY_SIZE));
+        spaceC.setMinimumWidth((int) Math.round(ROW_C_LEFT_OFFSET * KEY_SIZE));
+        spaceD.setMinimumWidth((int) Math.round(ROW_D_LEFT_OFFSET * KEY_SIZE));
+        spaceE.setMinimumWidth((int) Math.round(ROW_E_LEFT_OFFSET * KEY_SIZE));
     }
 
     private void setTextViewSize(int size)
@@ -201,4 +211,35 @@ public class MainActivity extends AppCompatActivity {
             textViewsE[i].setBackgroundColor(color);
         }
     }
+
+    private void randomizeBackgroundColors() {
+        int color;
+        Random r = new Random();
+        for (int i = 0; i < ROW_A_SIZE; i++)
+        {
+            color = Color.argb(1, r.nextInt(256), r.nextInt(256), r.nextInt(256));
+            textViewsA[i].setBackgroundColor(color);
+        }
+        for (int i = 0; i < ROW_B_SIZE; i++)
+        {
+            color = Color.argb(1, r.nextInt(256), r.nextInt(256), r.nextInt(256));
+            textViewsB[i].setBackgroundColor(color);
+        }
+        for (int i = 0; i < ROW_C_SIZE; i++)
+        {
+            color = Color.argb(1, r.nextInt(256), r.nextInt(256), r.nextInt(256));
+            textViewsC[i].setBackgroundColor(color);
+        }
+        for (int i = 0; i < ROW_D_SIZE; i++)
+        {
+            color = Color.argb(1, r.nextInt(256), r.nextInt(256), r.nextInt(256));
+            textViewsD[i].setBackgroundColor(color);
+        }
+        for (int i = 0; i < ROW_E_SIZE; i++)
+        {
+            color = Color.argb(1, r.nextInt(256), r.nextInt(256), r.nextInt(256));
+            textViewsE[i].setBackgroundColor(color);
+        }
+    }
+
 }
