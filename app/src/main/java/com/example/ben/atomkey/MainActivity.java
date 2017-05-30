@@ -11,13 +11,14 @@ import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
 
+    private static final int NUM_ROWS = 5;
     private static final int ROW_A_SIZE = 4;
     private static final int ROW_B_SIZE = 6;
     private static final int ROW_C_SIZE = 7;
     private static final int ROW_D_SIZE = 6;
     private static final int ROW_E_SIZE = 4;
 
-    private static final int KEY_SIZE = 100;
+    private static final int KEY_SIZE = 150;
 
     private static final double ROW_A_LEFT_OFFSET = 1.5; // Expressed as a factor of KEY_SIZE
     private static final double ROW_B_LEFT_OFFSET = 0.5;
@@ -35,18 +36,22 @@ public class MainActivity extends AppCompatActivity {
     private LinearLayout linearLayoutRowC;
     private LinearLayout linearLayoutRowD;
     private LinearLayout linearLayoutRowE;
+    private LinearLayout linearLayoutKeyboard;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         findViews();
-//        setTextViewSize(KEY_SIZE);
-        setBackgroundColor(Color.BLUE);
-//        setBorder();
+        linearLayoutKeyboard.setMinimumWidth(ROW_C_SIZE * KEY_SIZE);
+        linearLayoutKeyboard.setMinimumHeight(NUM_ROWS * KEY_SIZE);
         setOffsets();
-
-
+        setTextViewSize(KEY_SIZE);
+        setBackgroundColor(Color.BLUE);
+        setOffsets();
+        linearLayoutKeyboard.requestLayout();
+        Log.d("size", "A1 size: " + textViewsA[0].getWidth() + "w, " + textViewsA[0].getHeight() + "h");
+        Log.d("size", "something else");
     }
 
     private void findViews() {
@@ -60,6 +65,7 @@ public class MainActivity extends AppCompatActivity {
         linearLayoutRowC = (LinearLayout) findViewById(R.id.RowC);
         linearLayoutRowD = (LinearLayout) findViewById(R.id.RowD);
         linearLayoutRowE = (LinearLayout) findViewById(R.id.RowE);
+        linearLayoutKeyboard = (LinearLayout) findViewById(R.id.keyboard);
         textViewsA[0] = (TextView) findViewById(R.id.A1);
         textViewsA[1] = (TextView) findViewById(R.id.A2);
         textViewsA[2] = (TextView) findViewById(R.id.A3);
