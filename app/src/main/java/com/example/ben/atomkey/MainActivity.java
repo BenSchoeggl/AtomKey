@@ -19,8 +19,8 @@ public class MainActivity extends AppCompatActivity {
     private static final int ROW_A_SIZE = 4;
     private static final int ROW_B_SIZE = 6;
     private static final int ROW_C_SIZE = 7;
-    private static final int ROW_D_SIZE = 6;
-    private static final int ROW_E_SIZE = 4;
+    private static final int ROW_D_SIZE = 7;
+    private static final int ROW_E_SIZE = 5;
 
     private static final int KEY_SIZE = 200;
 
@@ -30,6 +30,7 @@ public class MainActivity extends AppCompatActivity {
     private static final double ROW_D_LEFT_OFFSET = 0.5;
     private static final double ROW_E_LEFT_OFFSET = 2.0;
 
+    private TextView[][] textViews;
     private TextView[] textViewsA;
     private TextView[] textViewsB;
     private TextView[] textViewsC;
@@ -51,12 +52,6 @@ public class MainActivity extends AppCompatActivity {
 
     private Button enterTextButton;
     private Button deleteButton;
-
-
-    private TextView scrollXText;
-    private TextView scrollYText;
-    private TextView keyLengthsText;
-    private TextView columnText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -106,8 +101,7 @@ public class MainActivity extends AppCompatActivity {
         enterTextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (currentHighlightedKey != null)
-                    field.setText(field.getText().toString() + currentHighlightedKey.getTag());
+                processEnterEvent();
             }
         });
         deleteButton.setOnClickListener(new View.OnClickListener() {
@@ -127,6 +121,22 @@ public class MainActivity extends AppCompatActivity {
         currentRow = -1;
         currentColumn = -1;
         updateHighlightedKey();
+    }
+
+    private void processEnterEvent() {
+        if (currentHighlightedKey != null) {
+            String tag = currentHighlightedKey.getTag().toString();
+            if (tag.length() == 1)
+                field.setText(field.getText().toString() + tag);
+            else if (tag.equalsIgnoreCase("shift"))
+            {
+                //do shift stuff
+            }
+            else if (tag.equalsIgnoreCase("sym"))
+            {
+                // do symbols stuff
+            }
+        }
     }
 
     private void updateHighlightedKey() {
@@ -185,10 +195,6 @@ public class MainActivity extends AppCompatActivity {
                 viewArrayRow = textViewsE;
                 break;
         }
-        scrollXText.setText("scrollX: " + centerScrollX);
-        scrollYText.setText("scrollY: " + centerScrollY);
-        keyLengthsText.setText("key lengths: " + keyLengths);
-        columnText.setText("column: " + column);
         currentColumn = column;
         currentRow = row;
         if (viewArrayRow != null && (column > -1 && column < viewArrayRow.length))
@@ -211,41 +217,68 @@ public class MainActivity extends AppCompatActivity {
         linearLayoutRowD = (LinearLayout) findViewById(R.id.RowD);
         linearLayoutRowE = (LinearLayout) findViewById(R.id.RowE);
         linearLayoutKeyboard = (LinearLayout) findViewById(R.id.keyboard);
-        textViewsA[0] = (TextView) findViewById(R.id.A1);
-        textViewsA[1] = (TextView) findViewById(R.id.A2);
-        textViewsA[2] = (TextView) findViewById(R.id.A3);
-        textViewsA[3] = (TextView) findViewById(R.id.A4);
-        textViewsB[0] = (TextView) findViewById(R.id.B1);
-        textViewsB[1] = (TextView) findViewById(R.id.B2);
-        textViewsB[2] = (TextView) findViewById(R.id.B3);
-        textViewsB[3] = (TextView) findViewById(R.id.B4);
-        textViewsB[4] = (TextView) findViewById(R.id.B5);
-        textViewsB[5] = (TextView) findViewById(R.id.B6);
-        textViewsC[0] = (TextView) findViewById(R.id.C1);
-        textViewsC[1] = (TextView) findViewById(R.id.C2);
-        textViewsC[2] = (TextView) findViewById(R.id.C3);
-        textViewsC[3] = (TextView) findViewById(R.id.C4);
-        textViewsC[4] = (TextView) findViewById(R.id.C5);
-        textViewsC[5] = (TextView) findViewById(R.id.C6);
-        textViewsC[6] = (TextView) findViewById(R.id.C7);
-        textViewsD[0] = (TextView) findViewById(R.id.D1);
-        textViewsD[1] = (TextView) findViewById(R.id.D2);
-        textViewsD[2] = (TextView) findViewById(R.id.D3);
-        textViewsD[3] = (TextView) findViewById(R.id.D4);
-        textViewsD[4] = (TextView) findViewById(R.id.D5);
-        textViewsD[5] = (TextView) findViewById(R.id.D6);
-        textViewsE[0] = (TextView) findViewById(R.id.E1);
-        textViewsE[1] = (TextView) findViewById(R.id.E2);
-        textViewsE[2] = (TextView) findViewById(R.id.E3);
-        textViewsE[3] = (TextView) findViewById(R.id.E4);
+        textViews[0][0] = (TextView) findViewById(R.id.A1);
+        textViews[0][1] = (TextView) findViewById(R.id.A2);
+        textViews[0][2] = (TextView) findViewById(R.id.A3);
+        textViews[0][3] = (TextView) findViewById(R.id.A4);
+        textViews[1][0] = (TextView) findViewById(R.id.B1);
+        textViews[1][1] = (TextView) findViewById(R.id.B2);
+        textViews[1][2] = (TextView) findViewById(R.id.B3);
+        textViews[1][3] = (TextView) findViewById(R.id.B4);
+        textViews[1][4] = (TextView) findViewById(R.id.B5);
+        textViews[1][5] = (TextView) findViewById(R.id.B6);
+        textViews[2][0] = (TextView) findViewById(R.id.C1);
+        textViews[2][1] = (TextView) findViewById(R.id.C2);
+        textViews[2][2] = (TextView) findViewById(R.id.C3);
+        textViews[2][3] = (TextView) findViewById(R.id.C4);
+        textViews[2][4] = (TextView) findViewById(R.id.C5);
+        textViews[2][5] = (TextView) findViewById(R.id.C6);
+        textViews[2][6] = (TextView) findViewById(R.id.C7);
+        textViews[3][0] = (TextView) findViewById(R.id.D1);
+        textViews[3][1] = (TextView) findViewById(R.id.D2);
+        textViews[3][2] = (TextView) findViewById(R.id.D3);
+        textViews[3][3] = (TextView) findViewById(R.id.D4);
+        textViews[3][4] = (TextView) findViewById(R.id.D5);
+        textViews[3][5] = (TextView) findViewById(R.id.D6);
+        textViews[3][6] = (TextView) findViewById(R.id.D7);
+        textViews[4][0] = (TextView) findViewById(R.id.E1);
+        textViews[4][1] = (TextView) findViewById(R.id.E2);
+        textViews[4][2] = (TextView) findViewById(R.id.E3);
+        textViews[4][3] = (TextView) findViewById(R.id.E4);
+        textViews[4][4] = (TextView) findViewById(R.id.E5);
+
+//        textViewsA[0] = (TextView) findViewById(R.id.A1);
+//        textViewsA[1] = (TextView) findViewById(R.id.A2);
+//        textViewsA[2] = (TextView) findViewById(R.id.A3);
+//        textViewsA[3] = (TextView) findViewById(R.id.A4);
+//        textViewsB[0] = (TextView) findViewById(R.id.B1);
+//        textViewsB[1] = (TextView) findViewById(R.id.B2);
+//        textViewsB[2] = (TextView) findViewById(R.id.B3);
+//        textViewsB[3] = (TextView) findViewById(R.id.B4);
+//        textViewsB[4] = (TextView) findViewById(R.id.B5);
+//        textViewsB[5] = (TextView) findViewById(R.id.B6);
+//        textViewsC[0] = (TextView) findViewById(R.id.C1);
+//        textViewsC[1] = (TextView) findViewById(R.id.C2);
+//        textViewsC[2] = (TextView) findViewById(R.id.C3);
+//        textViewsC[3] = (TextView) findViewById(R.id.C4);
+//        textViewsC[4] = (TextView) findViewById(R.id.C5);
+//        textViewsC[5] = (TextView) findViewById(R.id.C6);
+//        textViewsC[6] = (TextView) findViewById(R.id.C7);
+//        textViewsD[0] = (TextView) findViewById(R.id.D1);
+//        textViewsD[1] = (TextView) findViewById(R.id.D2);
+//        textViewsD[2] = (TextView) findViewById(R.id.D3);
+//        textViewsD[3] = (TextView) findViewById(R.id.D4);
+//        textViewsD[4] = (TextView) findViewById(R.id.D5);
+//        textViewsD[5] = (TextView) findViewById(R.id.D6);
+//        textViewsD[6] = (TextView) findViewById(R.id.D7);
+//        textViewsE[0] = (TextView) findViewById(R.id.E1);
+//        textViewsE[1] = (TextView) findViewById(R.id.E2);
+//        textViewsE[2] = (TextView) findViewById(R.id.E3);
+//        textViewsE[3] = (TextView) findViewById(R.id.E4);
+//        textViewsE[4] = (TextView) findViewById(R.id.E5);
         field = (EditText) findViewById(R.id.field);
         enterTextButton = (Button) findViewById(R.id.inputButton);
         deleteButton = (Button) findViewById(R.id.deleteButton);
-
-        scrollXText = (TextView) findViewById(R.id.scrollX);
-        scrollYText = (TextView) findViewById(R.id.scrollY);
-        columnText = (TextView) findViewById(R.id.column);
-        keyLengthsText = (TextView) findViewById(R.id.keyLengthsText);
 
     }
 

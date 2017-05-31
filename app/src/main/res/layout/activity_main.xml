@@ -19,8 +19,10 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:divider="@drawable/divider_clear"
             android:gravity="center"
             android:orientation="vertical"
+            android:showDividers="middle"
             tools:layout_editor_absoluteX="8dp"
             tools:layout_editor_absoluteY="8dp">
 
@@ -317,6 +319,15 @@
                                     android:tag="v"
                                     android:text="V" />
 
+                                <TextView
+                                    android:id="@+id/D7"
+                                    android:layout_width="75dp"
+                                    android:layout_height="75dp"
+                                    android:layout_weight="1"
+                                    android:gravity="center_vertical|center_horizontal"
+                                    android:tag="shift"
+                                    android:text="SHIFT" />
+
                             </LinearLayout>
 
                             <LinearLayout
@@ -363,6 +374,15 @@
                                     android:tag="z"
                                     android:text="Z" />
 
+                                <TextView
+                                    android:id="@+id/E5"
+                                    android:layout_width="75dp"
+                                    android:layout_height="75dp"
+                                    android:layout_weight="1"
+                                    android:gravity="center_vertical|center_horizontal"
+                                    android:tag="SYM"
+                                    android:text="SYM" />
+
                             </LinearLayout>
                         </LinearLayout>
                     </ScrollView>
@@ -377,30 +397,6 @@
                     android:textColor="@color/colorAccent" />
 
             </FrameLayout>
-
-            <TextView
-                android:id="@+id/scrollX"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="TextView" />
-
-            <TextView
-                android:id="@+id/scrollY"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="TextView" />
-
-            <TextView
-                android:id="@+id/keyLengthsText"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="TextView" />
-
-            <TextView
-                android:id="@+id/column"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="TextView" />
 
             <Button
                 android:id="@+id/inputButton"
