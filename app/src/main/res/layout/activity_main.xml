@@ -7,366 +7,407 @@
     android:layout_gravity="center"
     tools:context="com.example.ben.atomkey.MainActivity">
 
-    <LinearLayout
-        android:layout_width="368dp"
-        android:layout_height="495dp"
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:clickable="false"
+        android:focusable="false"
         android:gravity="center"
-        android:orientation="vertical"
         tools:layout_editor_absoluteX="8dp"
         tools:layout_editor_absoluteY="8dp">
 
-        <FrameLayout
-            android:layout_width="250dp"
-            android:layout_height="250dp">
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical"
+            tools:layout_editor_absoluteX="8dp"
+            tools:layout_editor_absoluteY="8dp">
 
-            <HorizontalScrollView
-                android:id="@+id/hScrollView"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                tools:layout_editor_absoluteX="8dp"
-                tools:layout_editor_absoluteY="8dp">
-
-                <ScrollView
-                    android:id="@+id/vScrollView"
-                    android:layout_width="250dp"
-                    android:layout_height="250dp">
-
-                    <LinearLayout
-                        android:id="@+id/keyboard"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical">
-
-                        <LinearLayout
-                            android:id="@+id/RowA"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            tools:layout_editor_absoluteX="8dp"
-                            tools:layout_editor_absoluteY="8dp">
-
-                            <Space
-                                android:id="@+id/space_a"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1" />
-
-                            <TextView
-                                android:id="@+id/A1"
-                                android:layout_width="75dp"
-                                android:layout_height="75dp"
-                                android:layout_weight="1"
-                                android:gravity="center_vertical|center_horizontal"
-                                android:text="B" />
-
-                            <TextView
-                                android:id="@+id/A2"
-                                android:layout_width="75dp"
-                                android:layout_height="75dp"
-                                android:layout_weight="1"
-                                android:gravity="center_vertical|center_horizontal"
-                                android:text="K" />
-
-                            <TextView
-                                android:id="@+id/A3"
-                                android:layout_width="75dp"
-                                android:layout_height="75dp"
-                                android:layout_weight="1"
-                                android:gravity="center_vertical|center_horizontal"
-                                android:text="D" />
-
-                            <TextView
-                                android:id="@+id/A4"
-                                android:layout_width="75dp"
-                                android:layout_height="75dp"
-                                android:layout_weight="1"
-                                android:gravity="center_vertical|center_horizontal"
-                                android:text="G" />
-
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:id="@+id/RowB"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal">
-
-                            <Space
-                                android:id="@+id/space_b"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1" />
-
-                            <TextView
-                                android:id="@+id/B1"
-                                android:layout_width="75dp"
-                                android:layout_height="75dp"
-                                android:layout_weight="1"
-                                android:gravity="center_vertical|center_horizontal"
-                                android:text="C" />
-
-                            <TextView
-                                android:id="@+id/B2"
-                                android:layout_width="75dp"
-                                android:layout_height="75dp"
-                                android:layout_weight="1"
-                                android:gravity="center_vertical|center_horizontal"
-                                android:text="A" />
-
-                            <TextView
-                                android:id="@+id/B3"
-                                android:layout_width="75dp"
-                                android:layout_height="75dp"
-                                android:layout_weight="1"
-                                android:gravity="center_vertical|center_horizontal"
-                                android:text="N" />
-
-                            <TextView
-                                android:id="@+id/B4"
-                                android:layout_width="75dp"
-                                android:layout_height="75dp"
-                                android:layout_weight="1"
-                                android:gravity="center_vertical|center_horizontal"
-                                android:text="I" />
-
-                            <TextView
-                                android:id="@+id/B5"
-                                android:layout_width="75dp"
-                                android:layout_height="75dp"
-                                android:layout_weight="1"
-                                android:gravity="center_vertical|center_horizontal"
-                                android:text="M" />
-
-                            <TextView
-                                android:id="@+id/B6"
-                                android:layout_width="75dp"
-                                android:layout_height="75dp"
-                                android:layout_weight="1"
-                                android:gravity="center_vertical|center_horizontal"
-                                android:text="Q" />
-
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:id="@+id/RowC"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal">
-
-                            <Space
-                                android:id="@+id/space_c"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1" />
-
-                            <TextView
-                                android:id="@+id/C1"
-                                android:layout_width="75dp"
-                                android:layout_height="75dp"
-                                android:layout_weight="1"
-                                android:gravity="center_vertical|center_horizontal"
-                                android:text="F" />
-
-                            <TextView
-                                android:id="@+id/C2"
-                                android:layout_width="75dp"
-                                android:layout_height="75dp"
-                                android:layout_weight="1"
-                                android:gravity="center_vertical|center_horizontal"
-                                android:text="L" />
-
-                            <TextView
-                                android:id="@+id/C3"
-                                android:layout_width="75dp"
-                                android:layout_height="75dp"
-                                android:layout_weight="1"
-                                android:gravity="center_vertical|center_horizontal"
-                                android:text="E" />
-
-                            <TextView
-                                android:id="@+id/C4"
-                                android:layout_width="75dp"
-                                android:layout_height="75dp"
-                                android:layout_weight="1"
-                                android:gravity="center_vertical|center_horizontal"
-                                android:text="SPC" />
-
-                            <TextView
-                                android:id="@+id/C5"
-                                android:layout_width="75dp"
-                                android:layout_height="75dp"
-                                android:layout_weight="1"
-                                android:gravity="center_vertical|center_horizontal"
-                                android:text="S" />
-
-                            <TextView
-                                android:id="@+id/C6"
-                                android:layout_width="75dp"
-                                android:layout_height="75dp"
-                                android:layout_weight="1"
-                                android:gravity="center_vertical|center_horizontal"
-                                android:text="Y" />
-
-                            <TextView
-                                android:id="@+id/C7"
-                                android:layout_width="75dp"
-                                android:layout_height="75dp"
-                                android:layout_weight="1"
-                                android:gravity="center_vertical|center_horizontal"
-                                android:text="X" />
-
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:id="@+id/RowD"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal">
-
-                            <Space
-                                android:id="@+id/space_d"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1" />
-
-                            <TextView
-                                android:id="@+id/D1"
-                                android:layout_width="75dp"
-                                android:layout_height="75dp"
-                                android:layout_weight="1"
-                                android:gravity="center_vertical|center_horizontal"
-                                android:text="J" />
-
-                            <TextView
-                                android:id="@+id/D2"
-                                android:layout_width="75dp"
-                                android:layout_height="75dp"
-                                android:layout_weight="1"
-                                android:gravity="center_vertical|center_horizontal"
-                                android:text="H" />
-
-                            <TextView
-                                android:id="@+id/D3"
-                                android:layout_width="75dp"
-                                android:layout_height="75dp"
-                                android:layout_weight="1"
-                                android:gravity="center_vertical|center_horizontal"
-                                android:text="T" />
-
-                            <TextView
-                                android:id="@+id/D4"
-                                android:layout_width="75dp"
-                                android:layout_height="75dp"
-                                android:layout_weight="1"
-                                android:gravity="center_vertical|center_horizontal"
-                                android:text="O" />
-
-                            <TextView
-                                android:id="@+id/D5"
-                                android:layout_width="75dp"
-                                android:layout_height="75dp"
-                                android:layout_weight="1"
-                                android:gravity="center_vertical|center_horizontal"
-                                android:text="P" />
-
-                            <TextView
-                                android:id="@+id/D6"
-                                android:layout_width="75dp"
-                                android:layout_height="75dp"
-                                android:layout_weight="1"
-                                android:gravity="center_vertical|center_horizontal"
-                                android:text="V" />
-
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:id="@+id/RowE"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal">
-
-                            <Space
-                                android:id="@+id/space_e"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1" />
-
-                            <TextView
-                                android:id="@+id/E1"
-                                android:layout_width="75dp"
-                                android:layout_height="75dp"
-                                android:layout_weight="1"
-                                android:gravity="center_vertical|center_horizontal"
-                                android:text="R" />
-
-                            <TextView
-                                android:id="@+id/E2"
-                                android:layout_width="75dp"
-                                android:layout_height="75dp"
-                                android:layout_weight="1"
-                                android:gravity="center_vertical|center_horizontal"
-                                android:text="U" />
-
-                            <TextView
-                                android:id="@+id/E3"
-                                android:layout_width="75dp"
-                                android:layout_height="75dp"
-                                android:layout_weight="1"
-                                android:gravity="center_vertical|center_horizontal"
-                                android:text="W" />
-
-                            <TextView
-                                android:id="@+id/E4"
-                                android:layout_width="75dp"
-                                android:layout_height="75dp"
-                                android:layout_weight="1"
-                                android:gravity="center_vertical|center_horizontal"
-                                android:text="Z" />
-
-                        </LinearLayout>
-                    </LinearLayout>
-                </ScrollView>
-            </HorizontalScrollView>
-
-            <TextView
-                android:id="@+id/x"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center"
-                android:text="x"
-                android:textColor="@color/colorAccent" />
+                android:orientation="horizontal">
 
-        </FrameLayout>
+                <EditText
+                    android:id="@+id/field"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:allowUndo="false"
+                    android:autoText="false"
+                    android:contextClickable="false"
+                    android:ems="10"
+                    android:inputType="none" />
 
-        <TextView
-            android:id="@+id/scrollX"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="TextView" />
+                <Button
+                    android:id="@+id/deleteButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="DELETE" />
+            </LinearLayout>
 
-        <TextView
-            android:id="@+id/scrollY"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="TextView" />
+            <FrameLayout
+                android:layout_width="250dp"
+                android:layout_height="250dp">
 
-        <TextView
-            android:id="@+id/keyLengthsText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="TextView" />
+                <HorizontalScrollView
+                    android:id="@+id/hScrollView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    tools:layout_editor_absoluteX="8dp"
+                    tools:layout_editor_absoluteY="8dp">
 
-        <TextView
-            android:id="@+id/column"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="TextView" />
+                    <ScrollView
+                        android:id="@+id/vScrollView"
+                        android:layout_width="250dp"
+                        android:layout_height="250dp">
 
-        <Button
-            android:id="@+id/inputButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Enter" />
-    </LinearLayout>
+                        <LinearLayout
+                            android:id="@+id/keyboard"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+
+                            <LinearLayout
+                                android:id="@+id/RowA"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:divider="@drawable/divider_vert"
+                                android:orientation="horizontal"
+                                android:showDividers="beginning|middle|end"
+                                tools:layout_editor_absoluteX="8dp"
+                                tools:layout_editor_absoluteY="8dp">
+
+                                <TextView
+                                    android:id="@+id/A1"
+                                    android:layout_width="75dp"
+                                    android:layout_height="75dp"
+                                    android:layout_weight="1"
+                                    android:gravity="center_vertical|center_horizontal"
+                                    android:tag="b"
+                                    android:text="B" />
+
+                                <TextView
+                                    android:id="@+id/A2"
+                                    android:layout_width="75dp"
+                                    android:layout_height="75dp"
+                                    android:layout_weight="1"
+                                    android:gravity="center_vertical|center_horizontal"
+                                    android:tag="k"
+                                    android:text="K" />
+
+                                <TextView
+                                    android:id="@+id/A3"
+                                    android:layout_width="75dp"
+                                    android:layout_height="75dp"
+                                    android:layout_weight="1"
+                                    android:gravity="center_vertical|center_horizontal"
+                                    android:tag="d"
+                                    android:text="D" />
+
+                                <TextView
+                                    android:id="@+id/A4"
+                                    android:layout_width="75dp"
+                                    android:layout_height="75dp"
+                                    android:layout_weight="1"
+                                    android:gravity="center_vertical|center_horizontal"
+                                    android:tag="g"
+                                    android:text="G" />
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:id="@+id/RowB"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:divider="@drawable/divider_vert"
+                                android:orientation="horizontal"
+                                android:showDividers="beginning|middle|end">
+
+                                <TextView
+                                    android:id="@+id/B1"
+                                    android:layout_width="75dp"
+                                    android:layout_height="75dp"
+                                    android:layout_weight="1"
+                                    android:gravity="center_vertical|center_horizontal"
+                                    android:tag="c"
+                                    android:text="C" />
+
+                                <TextView
+                                    android:id="@+id/B2"
+                                    android:layout_width="75dp"
+                                    android:layout_height="75dp"
+                                    android:layout_weight="1"
+                                    android:gravity="center_vertical|center_horizontal"
+                                    android:tag="a"
+                                    android:text="A" />
+
+                                <TextView
+                                    android:id="@+id/B3"
+                                    android:layout_width="75dp"
+                                    android:layout_height="75dp"
+                                    android:layout_weight="1"
+                                    android:gravity="center_vertical|center_horizontal"
+                                    android:tag="n"
+                                    android:text="N" />
+
+                                <TextView
+                                    android:id="@+id/B4"
+                                    android:layout_width="75dp"
+                                    android:layout_height="75dp"
+                                    android:layout_weight="1"
+                                    android:gravity="center_vertical|center_horizontal"
+                                    android:tag="i"
+                                    android:text="I" />
+
+                                <TextView
+                                    android:id="@+id/B5"
+                                    android:layout_width="75dp"
+                                    android:layout_height="75dp"
+                                    android:layout_weight="1"
+                                    android:gravity="center_vertical|center_horizontal"
+                                    android:tag="m"
+                                    android:text="M" />
+
+                                <TextView
+                                    android:id="@+id/B6"
+                                    android:layout_width="75dp"
+                                    android:layout_height="75dp"
+                                    android:layout_weight="1"
+                                    android:gravity="center_vertical|center_horizontal"
+                                    android:tag="q"
+                                    android:text="Q" />
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:id="@+id/RowC"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:divider="@drawable/divider_vert"
+                                android:orientation="horizontal"
+                                android:showDividers="beginning|middle|end">
+
+                                <TextView
+                                    android:id="@+id/C1"
+                                    android:layout_width="75dp"
+                                    android:layout_height="75dp"
+                                    android:layout_weight="1"
+                                    android:gravity="center_vertical|center_horizontal"
+                                    android:tag="f"
+                                    android:text="F" />
+
+                                <TextView
+                                    android:id="@+id/C2"
+                                    android:layout_width="75dp"
+                                    android:layout_height="75dp"
+                                    android:layout_weight="1"
+                                    android:gravity="center_vertical|center_horizontal"
+                                    android:tag="l"
+                                    android:text="L" />
+
+                                <TextView
+                                    android:id="@+id/C3"
+                                    android:layout_width="75dp"
+                                    android:layout_height="75dp"
+                                    android:layout_weight="1"
+                                    android:gravity="center_vertical|center_horizontal"
+                                    android:tag="e"
+                                    android:text="E" />
+
+                                <TextView
+                                    android:id="@+id/C4"
+                                    android:layout_width="75dp"
+                                    android:layout_height="75dp"
+                                    android:layout_weight="1"
+                                    android:gravity="center_vertical|center_horizontal"
+                                    android:tag=" "
+                                    android:text="SPC" />
+
+                                <TextView
+                                    android:id="@+id/C5"
+                                    android:layout_width="75dp"
+                                    android:layout_height="75dp"
+                                    android:layout_weight="1"
+                                    android:gravity="center_vertical|center_horizontal"
+                                    android:tag="s"
+                                    android:text="S" />
+
+                                <TextView
+                                    android:id="@+id/C6"
+                                    android:layout_width="75dp"
+                                    android:layout_height="75dp"
+                                    android:layout_weight="1"
+                                    android:gravity="center_vertical|center_horizontal"
+                                    android:tag="y"
+                                    android:text="Y" />
+
+                                <TextView
+                                    android:id="@+id/C7"
+                                    android:layout_width="75dp"
+                                    android:layout_height="75dp"
+                                    android:layout_weight="1"
+                                    android:gravity="center_vertical|center_horizontal"
+                                    android:tag="x"
+                                    android:text="X" />
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:id="@+id/RowD"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:divider="@drawable/divider_vert"
+                                android:orientation="horizontal"
+                                android:showDividers="beginning|middle|end">
+
+                                <TextView
+                                    android:id="@+id/D1"
+                                    android:layout_width="75dp"
+                                    android:layout_height="75dp"
+                                    android:layout_weight="1"
+                                    android:gravity="center_vertical|center_horizontal"
+                                    android:tag="j"
+                                    android:text="J" />
+
+                                <TextView
+                                    android:id="@+id/D2"
+                                    android:layout_width="75dp"
+                                    android:layout_height="75dp"
+                                    android:layout_weight="1"
+                                    android:gravity="center_vertical|center_horizontal"
+                                    android:tag="h"
+                                    android:text="H" />
+
+                                <TextView
+                                    android:id="@+id/D3"
+                                    android:layout_width="75dp"
+                                    android:layout_height="75dp"
+                                    android:layout_weight="1"
+                                    android:gravity="center_vertical|center_horizontal"
+                                    android:tag="t"
+                                    android:text="T" />
+
+                                <TextView
+                                    android:id="@+id/D4"
+                                    android:layout_width="75dp"
+                                    android:layout_height="75dp"
+                                    android:layout_weight="1"
+                                    android:gravity="center_vertical|center_horizontal"
+                                    android:tag="o"
+                                    android:text="O" />
+
+                                <TextView
+                                    android:id="@+id/D5"
+                                    android:layout_width="75dp"
+                                    android:layout_height="75dp"
+                                    android:layout_weight="1"
+                                    android:gravity="center_vertical|center_horizontal"
+                                    android:tag="p"
+                                    android:text="P" />
+
+                                <TextView
+                                    android:id="@+id/D6"
+                                    android:layout_width="75dp"
+                                    android:layout_height="75dp"
+                                    android:layout_weight="1"
+                                    android:gravity="center_vertical|center_horizontal"
+                                    android:tag="v"
+                                    android:text="V" />
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:id="@+id/RowE"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:divider="@drawable/divider_vert"
+                                android:orientation="horizontal"
+                                android:showDividers="beginning|middle|end">
+
+                                <TextView
+                                    android:id="@+id/E1"
+                                    android:layout_width="75dp"
+                                    android:layout_height="75dp"
+                                    android:layout_weight="1"
+                                    android:gravity="center_vertical|center_horizontal"
+                                    android:tag="r"
+                                    android:text="R" />
+
+                                <TextView
+                                    android:id="@+id/E2"
+                                    android:layout_width="75dp"
+                                    android:layout_height="75dp"
+                                    android:layout_weight="1"
+                                    android:gravity="center_vertical|center_horizontal"
+                                    android:tag="u"
+                                    android:text="U" />
+
+                                <TextView
+                                    android:id="@+id/E3"
+                                    android:layout_width="75dp"
+                                    android:layout_height="75dp"
+                                    android:layout_weight="1"
+                                    android:gravity="center_vertical|center_horizontal"
+                                    android:tag="w"
+                                    android:text="W" />
+
+                                <TextView
+                                    android:id="@+id/E4"
+                                    android:layout_width="75dp"
+                                    android:layout_height="75dp"
+                                    android:layout_weight="1"
+                                    android:gravity="center_vertical|center_horizontal"
+                                    android:tag="z"
+                                    android:text="Z" />
+
+                            </LinearLayout>
+                        </LinearLayout>
+                    </ScrollView>
+                </HorizontalScrollView>
+
+                <TextView
+                    android:id="@+id/x"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="x"
+                    android:textColor="@color/colorAccent" />
+
+            </FrameLayout>
+
+            <TextView
+                android:id="@+id/scrollX"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="TextView" />
+
+            <TextView
+                android:id="@+id/scrollY"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="TextView" />
+
+            <TextView
+                android:id="@+id/keyLengthsText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="TextView" />
+
+            <TextView
+                android:id="@+id/column"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="TextView" />
+
+            <Button
+                android:id="@+id/inputButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Enter" />
+        </LinearLayout>
+    </RelativeLayout>
 
 </android.support.constraint.ConstraintLayout>

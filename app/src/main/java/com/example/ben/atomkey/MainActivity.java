@@ -1,24 +1,16 @@
 package com.example.ben.atomkey;
 
 import android.graphics.Color;
-import android.support.v4.content.ContextCompat;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.HorizontalScrollView;
-import android.widget.RelativeLayout;
 import android.widget.ScrollView;
-import android.widget.Space;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
-import org.w3c.dom.Text;
-
-import java.util.Random;
-import java.util.Timer;
-import java.util.TimerTask;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -43,11 +35,6 @@ public class MainActivity extends AppCompatActivity {
     private TextView[] textViewsC;
     private TextView[] textViewsD;
     private TextView[] textViewsE;
-    private Space spaceA;
-    private Space spaceB;
-    private Space spaceC;
-    private Space spaceD;
-    private Space spaceE;
     private ScrollView vScrollView;
     private HorizontalScrollView hScrollView;
     private LinearLayout linearLayoutRowA;
@@ -58,9 +45,13 @@ public class MainActivity extends AppCompatActivity {
     private LinearLayout linearLayoutKeyboard;
 
     private TextView currentHighlightedKey;
+    private int currentRow;
+    private int currentColumn;
+    private EditText field;
 
-    private int lastRow;
-    private int lastColumn;
+    private Button enterTextButton;
+    private Button deleteButton;
+
 
     private TextView scrollXText;
     private TextView scrollYText;
@@ -107,82 +98,99 @@ public class MainActivity extends AppCompatActivity {
         View.OnScrollChangeListener scrollListener = new View.OnScrollChangeListener() {
             @Override
             public void onScrollChange(View v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
-                TextView newHighlightedKey = getViewUnderCenter();
-                if (newHighlightedKey != currentHighlightedKey)
-                {
-                    if (newHighlightedKey != null)
-                        newHighlightedKey.setBackgroundColor(Color.BLUE);
-                    if (currentHighlightedKey != null)
-                        currentHighlightedKey.setBackgroundColor(Color.TRANSPARENT);
-                    currentHighlightedKey = newHighlightedKey;
-                }
+                updateHighlightedKey();
             }
         };
         vScrollView.setOnScrollChangeListener(scrollListener);
         hScrollView.setOnScrollChangeListener(scrollListener);
+        enterTextButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (currentHighlightedKey != null)
+                    field.setText(field.getText().toString() + currentHighlightedKey.getTag());
+            }
+        });
+        deleteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                field.setText(field.getText().toString().substring(0, field.getText().length() - 1));
+            }
+        });
+        field.setClickable(false);
+        field.setFocusable(false);
+        enterTextButton.requestFocus();
 
         setOffsets();
         setTextViewSize(KEY_SIZE);
-//        linearLayoutKeyboard.setPadding(250, 250, 250, 250);
-//        Timer t = new Timer();
-//        t.schedule(new TimerTask() {
-//            @Override
-//            public void run() {
-//                linearLayoutKeyboard.setPadding(
-//                        vScrollView.getHeight() / 2,
-//                        vScrollView.getHeight() / 2,
-//                        vScrollView.getHeight() / 2,
-//                        vScrollView.getHeight() / 2
-//                );
-//            }
-//        }, 100);
-        ((LinearLayout) findViewById(R.id.keyboard)).setBackgroundColor(Color.GRAY);
-        lastRow = -2;
-        lastColumn = -2;
+        setBackgrounds();
+        linearLayoutKeyboard.setPadding(300, 300, 300, 300);
+        currentRow = -1;
+        currentColumn = -1;
+        updateHighlightedKey();
+    }
+
+    private void updateHighlightedKey() {
+        TextView newHighlightedKey = getViewUnderCenter();
+        if (newHighlightedKey != currentHighlightedKey)
+        {
+            if (newHighlightedKey != null)
+                newHighlightedKey.setBackgroundResource(
+                        currentRow == NUM_ROWS - 1
+                                ? R.drawable.background_top_bottom_highlighted
+                                : R.drawable.background_top_highlighted
+                );
+            if (currentHighlightedKey != null)
+                currentHighlightedKey.setBackgroundResource(
+                        currentRow == NUM_ROWS - 1
+                                ? R.drawable.background_top_bottom_normal
+                                : R.drawable.background_top_normal
+                );
+            currentHighlightedKey = newHighlightedKey;
+        }
     }
 
     private TextView getViewUnderCenter()
     {
-        int centerScrollY = vScrollView.getScrollY() + vScrollView.getHeight() / 2/* - linearLayoutKeyboard.getPaddingLeft()*/; // all padding should be the same
-        int row = centerScrollY / KEY_SIZE;
+        int centerScrollY = vScrollView.getScrollY() + vScrollView.getHeight() / 2 - linearLayoutKeyboard.getPaddingLeft(); // all padding should be the same
+        int row = centerScrollY < 0 || centerScrollY > NUM_ROWS * KEY_SIZE ? -1 : centerScrollY / KEY_SIZE;
         TextView[] viewArrayRow = null;
-        int centerScrollX = hScrollView.getScrollX() + hScrollView.getWidth() / 2 /*- linearLayoutKeyboard.getPaddingLeft()*/;
-        double keyLengths = (centerScrollX / (double) KEY_SIZE) + 0.5;
+        int centerScrollX = (hScrollView.getScrollX() - linearLayoutKeyboard.getPaddingLeft()) + hScrollView.getWidth() / 2;
+        double keyLengths = (centerScrollX / (double) KEY_SIZE);
         int column = -1;
         switch(row)
         {
             case 0:
                 if (keyLengths > ROW_A_LEFT_OFFSET && keyLengths < ROW_A_LEFT_OFFSET + ROW_A_SIZE)
-                    column = (int) Math.round(keyLengths - ROW_A_LEFT_OFFSET) - 1;  // -1 cause we on dat zero based indexing lyfestyle bruh
+                    column = (int) Math.floor(keyLengths - ROW_A_LEFT_OFFSET);
                 viewArrayRow = textViewsA;
                 break;
             case 1:
                 if (keyLengths > ROW_B_LEFT_OFFSET && keyLengths < ROW_B_LEFT_OFFSET + ROW_B_SIZE)
-                    column = (int) Math.round(keyLengths - ROW_B_LEFT_OFFSET) - 1;
+                    column = (int) Math.floor(keyLengths - ROW_B_LEFT_OFFSET);
                 viewArrayRow = textViewsB;
                 break;
             case 2:
                 if (keyLengths > ROW_C_LEFT_OFFSET && keyLengths < ROW_C_LEFT_OFFSET + ROW_C_SIZE)
-                    column = (int) Math.round(keyLengths - ROW_C_LEFT_OFFSET) - 1;
+                    column = (int) Math.floor(keyLengths - ROW_C_LEFT_OFFSET);
                 viewArrayRow = textViewsC;
                 break;
             case 3:
                 if (keyLengths > ROW_D_LEFT_OFFSET && keyLengths < ROW_D_LEFT_OFFSET + ROW_D_SIZE)
-                    column = (int) Math.round(keyLengths - ROW_D_LEFT_OFFSET) - 1;
+                    column = (int) Math.floor(keyLengths - ROW_D_LEFT_OFFSET);
                 viewArrayRow = textViewsD;
                 break;
             case 4:
                 if (keyLengths > ROW_E_LEFT_OFFSET && keyLengths < ROW_E_LEFT_OFFSET + ROW_E_SIZE)
-                    column = (int) Math.round(keyLengths - ROW_E_LEFT_OFFSET) - 1;
+                    column = (int) Math.floor(keyLengths - ROW_E_LEFT_OFFSET);
                 viewArrayRow = textViewsE;
                 break;
         }
-        lastRow = row;
-        lastColumn = column;
-        scrollXText.setText("scrollX: " + hScrollView.getScrollX());
+        scrollXText.setText("scrollX: " + centerScrollX);
         scrollYText.setText("scrollY: " + centerScrollY);
         keyLengthsText.setText("key lengths: " + keyLengths);
         columnText.setText("column: " + column);
+        currentColumn = column;
+        currentRow = row;
         if (viewArrayRow != null && (column > -1 && column < viewArrayRow.length))
             return viewArrayRow[column];
         else
@@ -195,11 +203,6 @@ public class MainActivity extends AppCompatActivity {
         textViewsC = new TextView[ROW_C_SIZE];
         textViewsD = new TextView[ROW_D_SIZE];
         textViewsE = new TextView[ROW_E_SIZE];
-        spaceA = (Space) findViewById(R.id.space_a);
-        spaceB = (Space) findViewById(R.id.space_b);
-        spaceC = (Space) findViewById(R.id.space_c);
-        spaceD = (Space) findViewById(R.id.space_d);
-        spaceE = (Space) findViewById(R.id.space_e);
         hScrollView = (HorizontalScrollView) findViewById(R.id.hScrollView);
         vScrollView = (ScrollView) findViewById(R.id.vScrollView);
         linearLayoutRowA = (LinearLayout) findViewById(R.id.RowA);
@@ -235,6 +238,9 @@ public class MainActivity extends AppCompatActivity {
         textViewsE[1] = (TextView) findViewById(R.id.E2);
         textViewsE[2] = (TextView) findViewById(R.id.E3);
         textViewsE[3] = (TextView) findViewById(R.id.E4);
+        field = (EditText) findViewById(R.id.field);
+        enterTextButton = (Button) findViewById(R.id.inputButton);
+        deleteButton = (Button) findViewById(R.id.deleteButton);
 
         scrollXText = (TextView) findViewById(R.id.scrollX);
         scrollYText = (TextView) findViewById(R.id.scrollY);
@@ -245,11 +251,11 @@ public class MainActivity extends AppCompatActivity {
 
     private void setOffsets()
     {
-        spaceA.setMinimumWidth((int) Math.round(ROW_A_LEFT_OFFSET * KEY_SIZE));
-        spaceB.setMinimumWidth((int) Math.round(ROW_B_LEFT_OFFSET * KEY_SIZE));
-        spaceC.setMinimumWidth((int) Math.round(ROW_C_LEFT_OFFSET * KEY_SIZE));
-        spaceD.setMinimumWidth((int) Math.round(ROW_D_LEFT_OFFSET * KEY_SIZE));
-        spaceE.setMinimumWidth((int) Math.round(ROW_E_LEFT_OFFSET * KEY_SIZE));
+        linearLayoutRowA.setPadding((int) Math.round(ROW_A_LEFT_OFFSET * KEY_SIZE), 0, 0, 0);
+        linearLayoutRowB.setPadding((int) Math.round(ROW_B_LEFT_OFFSET * KEY_SIZE), 0, 0, 0);
+        linearLayoutRowC.setPadding((int) Math.round(ROW_C_LEFT_OFFSET * KEY_SIZE), 0, 0, 0);
+        linearLayoutRowD.setPadding((int) Math.round(ROW_D_LEFT_OFFSET * KEY_SIZE), 0, 0, 0);
+        linearLayoutRowE.setPadding((int) Math.round(ROW_E_LEFT_OFFSET * KEY_SIZE), 0, 0, 0);
     }
 
     private void setTextViewSize(int size)
@@ -281,102 +287,26 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-//    private void setBorder() {
-//        for (int i = 0; i < ROW_A_SIZE; i++)
-//        {
-//            textViewsA[i].setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.border));
-//        }
-//        for (int i = 0; i < ROW_B_SIZE; i++)
-//        {
-//            textViewsB[i].setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.border));
-//        }
-//        for (int i = 0; i < ROW_C_SIZE; i++)
-//        {
-//            textViewsC[i].setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.border));
-//        }
-//        for (int i = 0; i < ROW_D_SIZE; i++)
-//        {
-//            textViewsD[i].setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.border));
-//        }
-//        for (int i = 0; i < ROW_E_SIZE; i++)
-//        {
-//            textViewsE[i].setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.border));
-//        }
-//
-//
-////        for (int i = 0; i < ROW_A_SIZE - 1; i++)
-////        {
-////            textViewsA[i].setCompoundDrawables(
-////                    ContextCompat.getDrawable(getApplicationContext(), R.drawable.border),
-////                    null,
-////                    null,
-////                    null
-////            );
-////        }
-////        textViewsA[ROW_A_SIZE - 1].setCompoundDrawables(
-////                ContextCompat.getDrawable(getApplicationContext(), R.drawable.border),
-////                null,
-////                ContextCompat.getDrawable(getApplicationContext(), R.drawable.border),
-////                null
-////        );
-//    }
-
-    private void setBackgroundColor(int color) {
+    private void setBackgrounds() {
         for (int i = 0; i < ROW_A_SIZE; i++)
         {
-            color = i % 2 == 0 ? Color.RED : Color.BLUE;
-            textViewsA[i].setBackgroundColor(color);
+            textViewsA[i].setBackgroundResource(R.drawable.background_top_normal);
         }
         for (int i = 0; i < ROW_B_SIZE; i++)
         {
-            color = i % 2 == 0 ? Color.RED : Color.BLUE;
-            textViewsB[i].setBackgroundColor(color);
+            textViewsB[i].setBackgroundResource(R.drawable.background_top_normal);
         }
         for (int i = 0; i < ROW_C_SIZE; i++)
         {
-            color = i % 2 == 0 ? Color.RED : Color.BLUE;
-            textViewsC[i].setBackgroundColor(color);
+            textViewsC[i].setBackgroundResource(R.drawable.background_top_normal);
         }
         for (int i = 0; i < ROW_D_SIZE; i++)
         {
-            color = i % 2 == 0 ? Color.RED : Color.BLUE;
-            textViewsD[i].setBackgroundColor(color);
+            textViewsD[i].setBackgroundResource(R.drawable.background_top_bottom_normal);
         }
         for (int i = 0; i < ROW_E_SIZE; i++)
         {
-            color = i % 2 == 0 ? Color.RED : Color.BLUE;
-            textViewsE[i].setBackgroundColor(color);
+            textViewsE[i].setBackgroundResource(R.drawable.background_top_bottom_normal);
         }
     }
-
-    private void randomizeBackgroundColors() {
-        int color;
-        Random r = new Random();
-        for (int i = 0; i < ROW_A_SIZE; i++)
-        {
-            color = Color.argb(1, r.nextInt(256), r.nextInt(256), r.nextInt(256));
-            textViewsA[i].setBackgroundColor(color);
-        }
-        for (int i = 0; i < ROW_B_SIZE; i++)
-        {
-            color = Color.argb(1, r.nextInt(256), r.nextInt(256), r.nextInt(256));
-            textViewsB[i].setBackgroundColor(color);
-        }
-        for (int i = 0; i < ROW_C_SIZE; i++)
-        {
-            color = Color.argb(1, r.nextInt(256), r.nextInt(256), r.nextInt(256));
-            textViewsC[i].setBackgroundColor(color);
-        }
-        for (int i = 0; i < ROW_D_SIZE; i++)
-        {
-            color = Color.argb(1, r.nextInt(256), r.nextInt(256), r.nextInt(256));
-            textViewsD[i].setBackgroundColor(color);
-        }
-        for (int i = 0; i < ROW_E_SIZE; i++)
-        {
-            color = Color.argb(1, r.nextInt(256), r.nextInt(256), r.nextInt(256));
-            textViewsE[i].setBackgroundColor(color);
-        }
-    }
-
 }
