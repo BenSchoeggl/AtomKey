@@ -20,8 +20,13 @@ public class MainActivity extends AppCompatActivity {
     private static final int ROW_C_SIZE = 7;
     private static final int ROW_D_SIZE = 7;
     private static final int ROW_E_SIZE = 5;
+    private static final int SYM_NUM_ROWS = 4;
+    private static final int SYM_ROW_A_SIZE = 3;
+    private static final int SYM_ROW_B_SIZE = 3;
+    private static final int SYM_ROW_C_SIZE = 3;
+    private static final int SYM_ROW_D_SIZE = 3;
 
-    private static final int KEY_SIZE = 200;
+    private static final int KEY_SIZE = 150;
 
     private static final double ROW_A_LEFT_OFFSET = 1.0; // Expressed as a factor of KEY_SIZE
     private static final double ROW_B_LEFT_OFFSET = 0.5;
@@ -30,14 +35,11 @@ public class MainActivity extends AppCompatActivity {
     private static final double ROW_E_LEFT_OFFSET = 2.0;
 
     private TextView[][] textViews;
+    private TextView[][] symTextViews;
     private ScrollView vScrollView;
     private HorizontalScrollView hScrollView;
-    private LinearLayout linearLayoutRowA;
-    private LinearLayout linearLayoutRowB;
-    private LinearLayout linearLayoutRowC;
-    private LinearLayout linearLayoutRowD;
-    private LinearLayout linearLayoutRowE;
     private LinearLayout letterKeyboard;
+    private LinearLayout symbolKeyboard;
 
     private TextView currentHighlightedKey;
     private int currentRow;
@@ -80,19 +82,12 @@ public class MainActivity extends AppCompatActivity {
                         started = false;
                         break;
                 }
+                updateHighlightedKey();
                 return true;
             }
         };
         vScrollView.setOnTouchListener(touchListener);
         hScrollView.setOnTouchListener(touchListener);
-        View.OnScrollChangeListener scrollListener = new View.OnScrollChangeListener() {
-            @Override
-            public void onScrollChange(View v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
-                updateHighlightedKey();
-            }
-        };
-        vScrollView.setOnScrollChangeListener(scrollListener);
-        hScrollView.setOnScrollChangeListener(scrollListener);
         enterTextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -113,9 +108,11 @@ public class MainActivity extends AppCompatActivity {
         setTextViewSize(KEY_SIZE);
         setBackgrounds();
         letterKeyboard.setPadding(300, 300, 300, 300);
+        symbolKeyboard.setPadding(300, 300, 300, 300);
         currentRow = -1;
         currentColumn = -1;
         setCase(false);
+        showLetterKeyboard(true);
         updateHighlightedKey();
     }
 
@@ -134,7 +131,9 @@ public class MainActivity extends AppCompatActivity {
             }
             else if (tag.equalsIgnoreCase("sym"))
             {
-                // do symbols stuff
+                hScrollView.scrollTo(0, 0);
+                vScrollView.scrollTo(0, 0);
+                showLetterKeyboard(false);
             }
         }
     }
@@ -161,41 +160,55 @@ public class MainActivity extends AppCompatActivity {
 
     private TextView getViewUnderCenter()
     {
-        int centerScrollY = vScrollView.getScrollY() + vScrollView.getHeight() / 2 - letterKeyboard.getPaddingLeft(); // all padding should be the same
-        int row = centerScrollY < 0 || centerScrollY > NUM_ROWS * KEY_SIZE ? -1 : centerScrollY / KEY_SIZE;
-        int centerScrollX = (hScrollView.getScrollX() - letterKeyboard.getPaddingLeft()) + hScrollView.getWidth() / 2;
-        double keyLengths = (centerScrollX / (double) KEY_SIZE);
-        int column = -1;
-        switch(row)
-        {
-            case 0:
-                if (keyLengths > ROW_A_LEFT_OFFSET && keyLengths < ROW_A_LEFT_OFFSET + ROW_A_SIZE)
-                    column = (int) Math.floor(keyLengths - ROW_A_LEFT_OFFSET);
-                break;
-            case 1:
-                if (keyLengths > ROW_B_LEFT_OFFSET && keyLengths < ROW_B_LEFT_OFFSET + ROW_B_SIZE)
-                    column = (int) Math.floor(keyLengths - ROW_B_LEFT_OFFSET);
-                break;
-            case 2:
-                if (keyLengths > ROW_C_LEFT_OFFSET && keyLengths < ROW_C_LEFT_OFFSET + ROW_C_SIZE)
-                    column = (int) Math.floor(keyLengths - ROW_C_LEFT_OFFSET);
-                break;
-            case 3:
-                if (keyLengths > ROW_D_LEFT_OFFSET && keyLengths < ROW_D_LEFT_OFFSET + ROW_D_SIZE)
-                    column = (int) Math.floor(keyLengths - ROW_D_LEFT_OFFSET);
-                break;
-            case 4:
-                if (keyLengths > ROW_E_LEFT_OFFSET && keyLengths < ROW_E_LEFT_OFFSET + ROW_E_SIZE)
-                    column = (int) Math.floor(keyLengths - ROW_E_LEFT_OFFSET);
-                break;
-        }
+        if (isLetterKeyboardVisible()) {
+            int centerScrollY = vScrollView.getScrollY() + vScrollView.getHeight() / 2 - letterKeyboard.getPaddingLeft(); // all padding should be the same
+            int row = centerScrollY < 0 || centerScrollY > NUM_ROWS * KEY_SIZE ? -1 : centerScrollY / KEY_SIZE;
+            int centerScrollX = (hScrollView.getScrollX() - letterKeyboard.getPaddingLeft()) + hScrollView.getWidth() / 2;
+            double keyLengths = (centerScrollX / (double) KEY_SIZE);
+            int column = -1;
+            switch (row) {
+                case 0:
+                    if (keyLengths > ROW_A_LEFT_OFFSET && keyLengths < ROW_A_LEFT_OFFSET + ROW_A_SIZE)
+                        column = (int) Math.floor(keyLengths - ROW_A_LEFT_OFFSET);
+                    break;
+                case 1:
+                    if (keyLengths > ROW_B_LEFT_OFFSET && keyLengths < ROW_B_LEFT_OFFSET + ROW_B_SIZE)
+                        column = (int) Math.floor(keyLengths - ROW_B_LEFT_OFFSET);
+                    break;
+                case 2:
+                    if (keyLengths > ROW_C_LEFT_OFFSET && keyLengths < ROW_C_LEFT_OFFSET + ROW_C_SIZE)
+                        column = (int) Math.floor(keyLengths - ROW_C_LEFT_OFFSET);
+                    break;
+                case 3:
+                    if (keyLengths > ROW_D_LEFT_OFFSET && keyLengths < ROW_D_LEFT_OFFSET + ROW_D_SIZE)
+                        column = (int) Math.floor(keyLengths - ROW_D_LEFT_OFFSET);
+                    break;
+                case 4:
+                    if (keyLengths > ROW_E_LEFT_OFFSET && keyLengths < ROW_E_LEFT_OFFSET + ROW_E_SIZE)
+                        column = (int) Math.floor(keyLengths - ROW_E_LEFT_OFFSET);
+                    break;
+            }
 
-        currentColumn = column;
-        currentRow = row;
-        if (row > -1 && row < NUM_ROWS && column > -1 && column < textViews[row].length)
-            return textViews[row][column];
-        else
-            return null;
+            currentColumn = column;
+            currentRow = row;
+            if (row > -1 && row < NUM_ROWS && column > -1 && column < textViews[row].length)
+                return textViews[row][column];
+            else
+                return null;
+        } else {
+            int centerScrollY = vScrollView.getScrollY() + vScrollView.getHeight() / 2 - symbolKeyboard.getPaddingTop();
+            int row = centerScrollY < 0 || centerScrollY > SYM_NUM_ROWS * KEY_SIZE ? -1 : centerScrollY / KEY_SIZE;
+            int centerScrollX = hScrollView.getScrollX() + hScrollView.getWidth() / 2 - symbolKeyboard.getPaddingLeft();
+            int column = centerScrollX < 0 || centerScrollX > SYM_NUM_ROWS * KEY_SIZE ? -1 : centerScrollY / KEY_SIZE;
+            currentColumn = column;
+            currentRow = row;
+            if (row > -1 && row < SYM_NUM_ROWS && column > -1 && column < symTextViews[row].length) {
+                TextView [] temp = symTextViews[row];
+                return temp[column];
+            }
+            else
+                return null;
+        }
     }
 
     private void findViews() {
@@ -207,12 +220,8 @@ public class MainActivity extends AppCompatActivity {
         textViews[4] = new TextView[ROW_E_SIZE];
         hScrollView = (HorizontalScrollView) findViewById(R.id.hScrollView);
         vScrollView = (ScrollView) findViewById(R.id.vScrollView);
-        linearLayoutRowA = (LinearLayout) findViewById(R.id.RowA);
-        linearLayoutRowB = (LinearLayout) findViewById(R.id.RowB);
-        linearLayoutRowC = (LinearLayout) findViewById(R.id.RowC);
-        linearLayoutRowD = (LinearLayout) findViewById(R.id.RowD);
-        linearLayoutRowE = (LinearLayout) findViewById(R.id.RowE);
-        letterKeyboard = (LinearLayout) findViewById(R.id.keyboard);
+        letterKeyboard = (LinearLayout) findViewById(R.id.letterKeyboard);
+        symbolKeyboard = (LinearLayout) findViewById(R.id.symbolKeyboard);
         textViews[0][0] = (TextView) findViewById(R.id.A1);
         textViews[0][1] = (TextView) findViewById(R.id.A2);
         textViews[0][2] = (TextView) findViewById(R.id.A3);
@@ -242,6 +251,23 @@ public class MainActivity extends AppCompatActivity {
         textViews[4][2] = (TextView) findViewById(R.id.E3);
         textViews[4][3] = (TextView) findViewById(R.id.E4);
         textViews[4][4] = (TextView) findViewById(R.id.E5);
+        symTextViews = new TextView[SYM_NUM_ROWS][];
+        symTextViews[0] = new TextView[SYM_ROW_A_SIZE];
+        symTextViews[1] = new TextView[SYM_ROW_B_SIZE];
+        symTextViews[2] = new TextView[SYM_ROW_C_SIZE];
+        symTextViews[3] = new TextView[SYM_ROW_D_SIZE];
+        symTextViews[0][0] = (TextView) findViewById(R.id.A1_SYM);
+        symTextViews[0][1] = (TextView) findViewById(R.id.A2_SYM);
+        symTextViews[0][2] = (TextView) findViewById(R.id.A3_SYM);
+        symTextViews[1][0] = (TextView) findViewById(R.id.B1_SYM);
+        symTextViews[1][1] = (TextView) findViewById(R.id.B2_SYM);
+        symTextViews[1][2] = (TextView) findViewById(R.id.B3_SYM);
+        symTextViews[2][0] = (TextView) findViewById(R.id.C1_SYM);
+        symTextViews[2][1] = (TextView) findViewById(R.id.C2_SYM);
+        symTextViews[2][2] = (TextView) findViewById(R.id.C3_SYM);
+        symTextViews[3][0] = (TextView) findViewById(R.id.D1_SYM);
+        symTextViews[3][1] = (TextView) findViewById(R.id.D2_SYM);
+        symTextViews[3][2] = (TextView) findViewById(R.id.D3_SYM);
         field = (EditText) findViewById(R.id.field);
         enterTextButton = (Button) findViewById(R.id.inputButton);
         deleteButton = (Button) findViewById(R.id.deleteButton);
@@ -250,11 +276,11 @@ public class MainActivity extends AppCompatActivity {
 
     private void setOffsets()
     {
-        linearLayoutRowA.setPadding((int) Math.round(ROW_A_LEFT_OFFSET * KEY_SIZE), 0, 0, 0);
-        linearLayoutRowB.setPadding((int) Math.round(ROW_B_LEFT_OFFSET * KEY_SIZE), 0, 0, 0);
-        linearLayoutRowC.setPadding((int) Math.round(ROW_C_LEFT_OFFSET * KEY_SIZE), 0, 0, 0);
-        linearLayoutRowD.setPadding((int) Math.round(ROW_D_LEFT_OFFSET * KEY_SIZE), 0, 0, 0);
-        linearLayoutRowE.setPadding((int) Math.round(ROW_E_LEFT_OFFSET * KEY_SIZE), 0, 0, 0);
+        findViewById(R.id.RowA).setPadding((int) Math.round(ROW_A_LEFT_OFFSET * KEY_SIZE), 0, 0, 0);
+        findViewById(R.id.RowB).setPadding((int) Math.round(ROW_B_LEFT_OFFSET * KEY_SIZE), 0, 0, 0);
+        findViewById(R.id.RowC).setPadding((int) Math.round(ROW_C_LEFT_OFFSET * KEY_SIZE), 0, 0, 0);
+        findViewById(R.id.RowD).setPadding((int) Math.round(ROW_D_LEFT_OFFSET * KEY_SIZE), 0, 0, 0);
+        findViewById(R.id.RowE).setPadding((int) Math.round(ROW_E_LEFT_OFFSET * KEY_SIZE), 0, 0, 0);
     }
 
     private void setTextViewSize(int size)
@@ -271,9 +297,17 @@ public class MainActivity extends AppCompatActivity {
     private void setBackgrounds() {
         for (int i = 0; i < NUM_ROWS; i++) {
             for (int j = 0; j < textViews[i].length; j++) {
-                int id = i == NUM_ROWS - 1 ? R.drawable.background_top_normal : R.drawable.background_top_bottom_normal;
                 textViews[i][j].setBackgroundResource(
-                        i == NUM_ROWS - 1
+                        i != NUM_ROWS - 1
+                                ? R.drawable.background_top_normal
+                                : R.drawable.background_top_bottom_normal
+                );
+            }
+        }
+        for (int i = 0; i < SYM_NUM_ROWS; i++) {
+            for (int j = 0; j < symTextViews[i].length; j++) {
+                symTextViews[i][j].setBackgroundResource(
+                        i != SYM_NUM_ROWS - 1
                                 ? R.drawable.background_top_normal
                                 : R.drawable.background_top_bottom_normal
                 );
@@ -286,7 +320,7 @@ public class MainActivity extends AppCompatActivity {
         for (int i = 0; i < textViews.length; i++) {
             for (int j = 0; j < textViews[i].length; j++) {
                 String tag = textViews[i][j].getTag().toString();
-                if (tag.length() == 1) {
+                if (tag.length() == 1 && !tag.equals(" ")) {
                     if (upper)
                         textViews[i][j].setText(tag.toUpperCase());
                     else
@@ -295,5 +329,22 @@ public class MainActivity extends AppCompatActivity {
             }
         }
         isUpperCase = upper;
+    }
+
+    private boolean isLetterKeyboardVisible()
+    {
+        return letterKeyboard.getVisibility() == View.VISIBLE;
+    }
+
+    private void showLetterKeyboard(boolean letter) {
+        if (letter) {
+            letterKeyboard.setVisibility(View.VISIBLE);
+            symbolKeyboard.setVisibility(View.GONE);
+        }
+        else
+        {
+            letterKeyboard.setVisibility(View.GONE);
+            symbolKeyboard.setVisibility(View.VISIBLE);
+        }
     }
 }
