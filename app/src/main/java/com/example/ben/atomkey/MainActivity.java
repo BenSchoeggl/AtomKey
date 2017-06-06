@@ -2,7 +2,11 @@ package com.example.ben.atomkey;
 
 import android.content.ClipData;
 import android.content.ClipboardManager;
-import android.speech.tts.TextToSpeech;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.os.DropBoxManager;
+import android.app.AlertDialog;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -17,6 +21,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import org.xmlpull.v1.XmlSerializer;
 import android.util.Xml;
+import android.widget.Toast;
 
 import java.io.IOException;
 import java.io.StringWriter;
@@ -29,7 +34,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Random;
 import java.util.Set;
-
 
 public class MainActivity extends AppCompatActivity {
 
@@ -556,6 +560,8 @@ public class MainActivity extends AppCompatActivity {
     private static final double ROW_D_LEFT_OFFSET = 0.5;
     private static final double ROW_E_LEFT_OFFSET = 2.0;
 
+    private static final int SCROLL_VIEW_PADDING = 200;
+
     private TextView[][] textViews;
     private TextView[][] symTextViews;
     private ScrollView vScrollView;
@@ -565,6 +571,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView currentHighlightedKey;
     private TextView phraseTextView;
     private Button testButton;
+    private Button nextButton;
     private NumberPicker testNumberPicker;
 
     private int currentRow;
@@ -578,6 +585,7 @@ public class MainActivity extends AppCompatActivity {
     private XmlSerializer serializer;
     private StringWriter xmlWriter;
     private List<String> trialStrings;
+    private List<EntryData> trialDataList;
     private int trialIndex;
 
     @Override
@@ -616,8 +624,12 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             }
         };
-        vScrollView.setOnTouchListener(touchListener);
         hScrollView.setOnTouchListener(touchListener);
+        vScrollView.setOnTouchListener(touchListener);
+        vScrollView.setHorizontalScrollBarEnabled(false);
+        vScrollView.setVerticalScrollBarEnabled(false);
+        hScrollView.setHorizontalScrollBarEnabled(false);
+        hScrollView.setVerticalScrollBarEnabled(false);
         enterTextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -630,6 +642,9 @@ public class MainActivity extends AppCompatActivity {
                 String text = field.getText().toString();
                 if (!text.isEmpty())
                     field.setText(text.substring(0, field.getText().length() - 1));
+                if (isTestRunning()) {
+                    addTestEntry((char) 8); // backspace value
+                }
             }
         });
         field.setClickable(false);
@@ -638,44 +653,40 @@ public class MainActivity extends AppCompatActivity {
         testNumberPicker.setMinValue(1);
         testNumberPicker.setMaxValue(PHRASE_SET.length);
         testNumberPicker.setWrapSelectorWheel(false);
-        testNumberPicker.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
-
-            @Override
-            public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
-            }
-        });
         testButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startTest(testNumberPicker.getValue());
+                if (!isTestRunning())
+                    startTest(testNumberPicker.getValue());
+                else
+                    endTest(false);
             }
         });
         serializer = Xml.newSerializer();
         trialIndex = -1;
-        testNumberPicker.setFocusable(false);
-        testNumberPicker.setClickable(false);
-        testNumberPicker.clearFocus();
-        findViewById(R.id.relative).requestFocus();
+        letterKeyboard.requestFocus();
+        nextButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                endTrial();
+                if (trialIndex < trialStrings.size())
+                    startTrial();
+                else
+                    endTest(true);
+            }
+        });
 
         setOffsets();
         setTextViewSize(KEY_SIZE);
         setBackgrounds();
-        letterKeyboard.setPadding(300, 300, 300, 300);
-        symbolKeyboard.setPadding(300, 300, 300, 300);
+        letterKeyboard.setPadding(SCROLL_VIEW_PADDING, SCROLL_VIEW_PADDING, SCROLL_VIEW_PADDING, SCROLL_VIEW_PADDING);
+        symbolKeyboard.setPadding(SCROLL_VIEW_PADDING, SCROLL_VIEW_PADDING, SCROLL_VIEW_PADDING, SCROLL_VIEW_PADDING);
         currentRow = -1;
         currentColumn = -1;
         setCase(false);
         showLetterKeyboard(true);
         updateHighlightedKey();
-
-        startTest(1);
-        startTrial();
-        addTestEntry('a');
-        addTestEntry('b');
-        addTestEntry('c');
-        endTrial();
-        endTest();
-        copyXml();
+        updateTestViews();
     }
 
     private void updateTestButton() {
@@ -683,22 +694,23 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void startTest(int trials) {
-//        trialStrings = new ArrayList<String>();
-//        Random r = new Random();
-//        Set<Integer> usedIndexes = new HashSet<Integer>();
-//        for (int i = 0; i < testNumberPicker.getValue(); i++) {
-//            int idx = r.nextInt(PHRASE_SET.length);
-//            while (usedIndexes.contains(idx)) {
-//                idx = r.nextInt(PHRASE_SET.length);
-//            }
-//            usedIndexes.add(idx);
-//            trialStrings.add(PHRASE_SET[idx]);
-//        }
-//        updateTestTextView();
-
-        // for test
+        field.setText("");
         trialStrings = new ArrayList<String>();
-        trialStrings.add("abc");
+        Random r = new Random();
+        Set<Integer> usedIndexes = new HashSet<Integer>();
+        for (int i = 0; i < trials; i++) {
+            int idx = r.nextInt(PHRASE_SET.length);
+            while (usedIndexes.contains(idx)) {
+                idx = r.nextInt(PHRASE_SET.length);
+            }
+            usedIndexes.add(idx);
+            trialStrings.add(PHRASE_SET[idx]);
+
+            // for test
+//            trialStrings.add("abc");
+        }
+        trialIndex = 0;
+        updateTestViews();
 
         xmlWriter = new StringWriter();
         try {
@@ -715,75 +727,136 @@ public class MainActivity extends AppCompatActivity {
         {
             Log.d("xml parser", e.toString());
         }
-        trialIndex = 0;
-        testButton.setEnabled(false);
+        startTrial();
 
     }
 
-    private void endTest() {
-        try {
-            serializer.endTag("", "TextTest");
-            serializer.endDocument();
-        } catch (IOException e) {
-            Log.d("xml parser", e.toString());
+    private void endTest(boolean success) {
+        trialIndex = -1;
+        updateTestViews();
+        field.setText("");
+        if (success) {
+            try {
+                serializer.endTag("", "TextTest");
+                serializer.endDocument();
+                testButton.setEnabled(true);
+                copyXml();
+            } catch (IOException e) {
+                Log.d("xml parser", e.toString());
+            }
         }
     }
 
     private void copyXml() {
-        String xml = xmlWriter.toString();
+        final String xml = xmlWriter.toString().replace("&amp;#x8;", "&#x8;");
         ((ClipboardManager) getSystemService(CLIPBOARD_SERVICE))
                 .setPrimaryClip(ClipData.newPlainText("xml", xmlWriter.toString()));
         Log.d("xml", xml);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        DialogInterface.OnClickListener yesListener = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Intent email = new Intent(Intent.ACTION_SEND);
+                getIntent().setType("text");
+                email.putExtra(Intent.EXTRA_EMAIL, "brendan.d.powers@gmail.com");
+                email.putExtra(Intent.EXTRA_SUBJECT, "AtomKey test result");
+                email.putExtra(Intent.EXTRA_TEXT, xml);
+                dialog.dismiss();
+                startActivity(Intent.createChooser(email, "Send Email"));
+            }
+        };
+        DialogInterface.OnClickListener noListener = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        };
+        builder.setMessage("The test has finished and the XML has been copied to the clipboard. Do you also want to send it in an email?")
+               .setPositiveButton("Yes", yesListener)
+               .setNegativeButton("No", noListener);
+        builder.show();
     }
 
-    private void startTrial() {
+    private void recordTrialXML() {
         try {
-            updateTestTextView();
             serializer.startTag("", "Trial");
-            serializer.attribute("", "number", "" + trialIndex + 1);
-            serializer.attribute("", "entries", "" + trialStrings.get(trialIndex).length());
+            serializer.attribute("", "number", "" + (trialIndex + 1));
+            serializer.attribute("", "entries", "" + trialDataList.size());
             serializer.startTag("", "Presented");
             serializer.text(trialStrings.get(trialIndex));
             serializer.endTag("", "Presented");
-        } catch (IOException e) {
-            Log.d("xml parser", e.toString());
-        }
-    }
-
-    private void endTrial() {
-        try {
+            for (int i = 0; i < trialDataList.size(); i++) {
+                EntryData data = trialDataList.get(i);
+                serializer.startTag("", "Entry");
+                serializer.attribute("", "char", data.character == (char) 8 ? "&#x8;" : "" + data.character);
+                serializer.attribute("", "value", "" + ((int) data.character));
+                serializer.attribute("", "ticks", "" + data.ticks);
+                serializer.attribute("", "seconds", "" + data.ticks / (double) 1e+9);
+                serializer.endTag("", "Entry");
+            }
             serializer.startTag("", "Transcribed");
             serializer.text(field.getText().toString());
             serializer.endTag("", "Transcribed");
             serializer.endTag("", "Trial");
-            updateTestTextView();
-            trialIndex++;
         } catch (IOException e) {
             Log.d("xml parser", e.toString());
         }
     }
 
-    private void updateTestTextView() {
+    private void startTrial() {
+        updateTestViews();
+        trialDataList = new ArrayList<EntryData>();
+//        try {
+//            updateTestViews();
+//            trialDataList = new ArrayList<EntryData>();
+//            serializer.startTag("", "Trial");
+//            serializer.attribute("", "number", "" + trialIndex + 1);
+//            serializer.attribute("", "entries", "" + trialStrings.get(trialIndex).length());
+//            serializer.startTag("", "Presented");
+//            serializer.text(trialStrings.get(trialIndex));
+//            serializer.endTag("", "Presented");
+//        } catch (IOException e) {
+//            Log.d("xml parser", e.toString());
+//        }
+    }
+
+    private void endTrial() {
+        recordTrialXML();
+        updateTestViews();
+        field.setText("");
+        trialIndex++;
+    }
+
+    private void updateTestViews() {
         if (trialIndex > -1 && trialStrings != null && trialIndex < trialStrings.size()) {
             findViewById(R.id.testTextLayout).setVisibility(View.VISIBLE);
             phraseTextView.setText(trialStrings.get(trialIndex));
+            nextButton.setVisibility(View.VISIBLE);
+            testButton.setText("END TEST");
+            testNumberPicker.setEnabled(false);
         } else {
             findViewById(R.id.testTextLayout).setVisibility(View.INVISIBLE);
+            nextButton.setVisibility(View.INVISIBLE);
+            testButton.setText("START TEST");
+            testNumberPicker.setEnabled(true);
         }
     }
 
     private void addTestEntry(char character) {
-        try {
-            serializer.startTag("", "Entry");
-            serializer.attribute("", "char", "" + character);
-            serializer.attribute("", "value", "" + ((int) character));
-            serializer.attribute("", "ticks", "" + System.nanoTime());
-            serializer.attribute("", "seconds", "" + System.currentTimeMillis() / 1000.0);
-            serializer.endTag("", "Entry");
-        } catch (IOException e)
-        {
-            Log.d("xml parser", e.toString());
-        }
+        EntryData data = new EntryData();
+        data.character = character;
+        data.ticks = System.nanoTime();
+        trialDataList.add(data);
+//        try {
+//            serializer.startTag("", "Entry");
+//            serializer.attribute("", "char", "" + character);
+//            serializer.attribute("", "value", "" + ((int) character));
+//            serializer.attribute("", "ticks", "" + System.nanoTime());
+//            serializer.attribute("", "seconds", "" + System.currentTimeMillis() / 1000.0);
+//            serializer.endTag("", "Entry");
+//        } catch (IOException e) {
+//            Log.d("xml parser", e.toString());
+//        }
     }
 
     private void processEnterEvent() {
@@ -794,6 +867,9 @@ public class MainActivity extends AppCompatActivity {
                         (isUpperCase ? tag.toUpperCase() : tag.toLowerCase()));
                 if (isUpperCase)
                     setCase(false);
+                if (isTestRunning()) {
+                    addTestEntry(tag.charAt(0));
+                }
             }
             else if (tag.equalsIgnoreCase("shift"))
             {
@@ -801,11 +877,15 @@ public class MainActivity extends AppCompatActivity {
             }
             else if (tag.equalsIgnoreCase("sym"))
             {
-                hScrollView.scrollTo(0, 0);
-                vScrollView.scrollTo(0, 0);
-                showLetterKeyboard(false);
+//                hScrollView.scrollTo(0, 0);
+//                vScrollView.scrollTo(0, 0);
+//                showLetterKeyboard(false);
             }
         }
+    }
+
+    private boolean isTestRunning() {
+        return trialIndex != -1;
     }
 
     private void updateHighlightedKey() {
@@ -943,6 +1023,7 @@ public class MainActivity extends AppCompatActivity {
         deleteButton = (Button) findViewById(R.id.deleteButton);
         phraseTextView = (TextView) findViewById(R.id.phraseTextView);
         testButton = (Button) findViewById(R.id.startTestButton);
+        nextButton = (Button) findViewById(R.id.nextButton);
         testNumberPicker = (NumberPicker) findViewById(R.id.testNumberPicker);
 
     }

@@ -84,8 +84,8 @@
 
                     <ScrollView
                         android:id="@+id/vScrollView"
-                        android:layout_width="250dp"
-                        android:layout_height="250dp">
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
 
                         <FrameLayout
                             android:layout_width="match_parent"
@@ -591,9 +591,17 @@
                 android:text="Enter" />
 
             <LinearLayout
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="match_parent"
+                android:gravity="right|center_vertical"
                 android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/nextButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0"
+                    android:text="Next" />
 
                 <Button
                     android:id="@+id/startTestButton"
@@ -601,11 +609,6 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="0"
                     android:text="Start Test" />
-
-                <Space
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1" />
 
                 <NumberPicker
                     android:id="@+id/testNumberPicker"
