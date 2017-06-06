@@ -552,7 +552,7 @@ public class MainActivity extends AppCompatActivity {
     private static final int SYM_ROW_C_SIZE = 3;
     private static final int SYM_ROW_D_SIZE = 3;
 
-    private static final int KEY_SIZE = 100;
+    private static final int KEY_SIZE = 75;
 
     private static final double ROW_A_LEFT_OFFSET = 1.0; // Expressed as a factor of KEY_SIZE
     private static final double ROW_B_LEFT_OFFSET = 0.5;
@@ -587,6 +587,8 @@ public class MainActivity extends AppCompatActivity {
     private List<String> trialStrings;
     private List<EntryData> trialDataList;
     private int trialIndex;
+
+    private TextView shifftKey;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -893,17 +895,26 @@ public class MainActivity extends AppCompatActivity {
         if (newHighlightedKey != currentHighlightedKey)
         {
             if (newHighlightedKey != null)
-                newHighlightedKey.setBackgroundResource(
-                        currentRow == NUM_ROWS - 1
-                                ? R.drawable.background_top_bottom_highlighted
-                                : R.drawable.background_top_highlighted
-                );
-            if (currentHighlightedKey != null)
-                currentHighlightedKey.setBackgroundResource(
-                        currentRow == NUM_ROWS - 1
-                                ? R.drawable.background_top_bottom_normal
-                                : R.drawable.background_top_normal
-                );
+                if (newHighlightedKey != shifftKey) {
+                    newHighlightedKey.setBackgroundResource(
+                            currentRow == NUM_ROWS - 1
+                                    ? R.drawable.background_top_bottom_highlighted
+                                    : R.drawable.background_top_highlighted
+                    );
+                } else {
+                    newHighlightedKey.setBackgroundResource(R.mipmap.ic_shift_highlighted);
+                }
+            if (currentHighlightedKey != null) {
+                if (currentHighlightedKey != shifftKey) {
+                    currentHighlightedKey.setBackgroundResource(
+                            currentRow == NUM_ROWS - 1
+                                    ? R.drawable.background_top_bottom_normal
+                                    : R.drawable.background_top_normal
+                    );
+                } else {
+                    currentHighlightedKey.setBackgroundResource(R.drawable.ic_shift_normal);
+                }
+            }
             currentHighlightedKey = newHighlightedKey;
         }
     }
@@ -1025,7 +1036,7 @@ public class MainActivity extends AppCompatActivity {
         testButton = (Button) findViewById(R.id.startTestButton);
         nextButton = (Button) findViewById(R.id.nextButton);
         testNumberPicker = (NumberPicker) findViewById(R.id.testNumberPicker);
-
+        shifftKey = textViews[NUM_ROWS - 2][textViews[NUM_ROWS - 2].length - 1];
     }
 
     private void setOffsets()
@@ -1058,6 +1069,8 @@ public class MainActivity extends AppCompatActivity {
                 );
             }
         }
+        // shift key
+        shifftKey.setBackgroundResource(R.drawable.ic_shift_normal);
         for (int i = 0; i < SYM_NUM_ROWS; i++) {
             for (int j = 0; j < symTextViews[i].length; j++) {
                 symTextViews[i][j].setBackgroundResource(
