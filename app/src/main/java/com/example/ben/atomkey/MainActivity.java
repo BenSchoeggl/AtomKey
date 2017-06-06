@@ -649,9 +649,9 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
-        field.setClickable(false);
-        field.setFocusable(false);
-        enterTextButton.requestFocus();
+//        field.setClickable(false);
+//        field.setFocusable(false);
+//        enterTextButton.requestFocus();
         testNumberPicker.setMinValue(1);
         testNumberPicker.setMaxValue(PHRASE_SET.length);
         testNumberPicker.setWrapSelectorWheel(false);
@@ -689,6 +689,14 @@ public class MainActivity extends AppCompatActivity {
         showLetterKeyboard(true);
         updateHighlightedKey();
         updateTestViews();
+        field.setClickable(false);
+        field.setFocusable(false);
+        testNumberPicker.setFocusable(false);
+        testNumberPicker.setClickable(false);
+        testNumberPicker.clearFocus();
+        letterKeyboard.setFocusable(true);
+        letterKeyboard.setFocusableInTouchMode(true);
+        letterKeyboard.requestFocus();
     }
 
     private void updateTestButton() {
